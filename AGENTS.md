@@ -1,10 +1,13 @@
 # AGENTS.md
+
 # PFPGen - Professional Profile Picture Generator Development Plan
 
 ## 🎯 Project Overview
+
 Build a full-stack Next.js app for background removal and profile picture editing with user authentication, canvas manipulation, and download capabilities.
 
 **Tech Stack Decisions**:
+
 - **Framework**: Next.js 15 + TypeScript (App Router)
 - **UI**: shadcn/ui + Tailwind CSS + Radix UI
 - **Database**: PostgreSQL + Prisma ORM
@@ -27,11 +30,12 @@ Build a full-stack Next.js app for background removal and profile picture editin
 ### Phase 0: Project Planning & Setup
 
 #### 0.1 Repository & Infrastructure
+
 - [x] Initialize Git repository: `git init && git checkout -b main`
 - [ ] Create develop branch: `git checkout -b develop`
 - [ ] Create feature branch template: `feature/[task-name]`
 - [x] Add comprehensive .gitignore for Next.js/Node.js/IDE files
-- [x] Create README.md with tech stack, setup instructions, and API docs
+- [ ] Create README.md with tech stack, setup instructions, and API docs
 - [ ] Add CONTRIBUTING.md with PR guidelines and code standards
 - [ ] Create LICENSE file (MIT recommended)
 - [ ] Add CODE_OF_CONDUCT.md
@@ -41,6 +45,7 @@ Build a full-stack Next.js app for background removal and profile picture editin
 - [ ] Create initial project structure documentation
 
 #### 0.2 Development Environment Setup
+
 - [ ] Configure VS Code workspace settings (.vscode/settings.json)
 - [ ] Add recommended VS Code extensions list (.vscode/extensions.json)
 - [ ] Set up EditorConfig (.editorconfig)
@@ -50,6 +55,7 @@ Build a full-stack Next.js app for background removal and profile picture editin
 - [ ] Set up local SSL certificates for HTTPS development
 
 #### 0.3 Project Requirements Documentation
+
 - [ ] Define user personas (professionals, content creators, job seekers)
 - [ ] Create user stories with acceptance criteria (15+ stories)
 - [ ] Design database ERD with relationships
@@ -64,6 +70,7 @@ Build a full-stack Next.js app for background removal and profile picture editin
 ### Phase 1: Next.js Project Initialization
 
 #### 1.1 Core Framework Setup
+
 - [x] Run `npx create-next-app@latest pfpgen --ts --eslint --tailwind --app --src-dir`
 - [x] Verify Next.js 15.0+ with App Router is installed
 - [ ] Update next.config.js with image domains and security headers
@@ -73,6 +80,7 @@ Build a full-stack Next.js app for background removal and profile picture editin
 - [ ] Verify hot reload and TypeScript compilation
 
 #### 1.2 Essential Dependencies Installation
+
 ```bash
 # Core Dependencies
 - [x] npm install @prisma/client prisma
@@ -90,7 +98,7 @@ Build a full-stack Next.js app for background removal and profile picture editin
 - [ ] npm install @radix-ui/react-icons lucide-react
 - [ ] npm install sonner  # Toast notifications
 
-# Development Dependencies  
+# Development Dependencies
 - [ ] npm install -D @types/node @types/fabric
 - [ ] npm install -D prettier eslint-config-prettier
 - [ ] npm install -D @typescript-eslint/eslint-plugin
@@ -102,6 +110,7 @@ Build a full-stack Next.js app for background removal and profile picture editin
 ```
 
 #### 1.3 shadcn/ui Complete Setup
+
 - [ ] Run `npx shadcn-ui@latest init` (New York style, Zinc theme)
 - [ ] Add Button: `npx shadcn@latest add button`
 - [ ] Add Input: `npx shadcn@latest add input`
@@ -122,6 +131,7 @@ Build a full-stack Next.js app for background removal and profile picture editin
 - [ ] Add Tooltip: `npx shadcn@latest add tooltip`
 
 #### 1.4 Development Tools Configuration
+
 - [ ] Create .prettierrc with specific formatting rules
 - [ ] Configure ESLint with Next.js, TypeScript, and Tailwind rules
 - [ ] Add .eslintignore for generated files
@@ -132,6 +142,7 @@ Build a full-stack Next.js app for background removal and profile picture editin
 - [ ] Configure Playwright for E2E testing
 
 #### 1.5 Project Structure Organization
+
 ```
 src/
 ├── app/
@@ -180,6 +191,7 @@ src/
 ### Phase 2: Database & Authentication Setup
 
 #### 2.1 Environment Configuration
+
 - [ ] Create `.env.local` with all required variables
 - [ ] Add `DATABASE_URL="postgresql://user:pass@localhost:5432/pfpgen"`
 - [ ] Add `AUTH_SECRET="your-auth-secret-32-chars-min"`
@@ -193,6 +205,7 @@ src/
 - [ ] Create .env.example with placeholder values
 
 #### 2.2 PostgreSQL Database Setup
+
 - [ ] Create Docker Compose for local PostgreSQL:
   ```yaml
   version: '3.8'
@@ -205,7 +218,7 @@ src/
         POSTGRES_USER: pfpgen_user
         POSTGRES_PASSWORD: pfpgen_password
       ports:
-        - "5432:5432"
+        - '5432:5432'
       volumes:
         - postgres_data:/var/lib/postgresql/data
   volumes:
@@ -217,9 +230,11 @@ src/
 - [ ] Configure connection pooling settings
 
 #### 2.3 Prisma Schema Design & Migration
+
 - [ ] Run `npx prisma init`
 - [ ] Configure schema.prisma with PostgreSQL provider
 - [ ] Design User model:
+
   ```prisma
   model User {
     id            String    @id @default(cuid())
@@ -231,13 +246,13 @@ src/
     credits       Int       @default(10)
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
-    
+
     // Relations
     accounts      Account[]
     sessions      Session[]
     images        ProcessedImage[]
     templates     Template[]
-    
+
     @@map("users")
   }
 
@@ -247,6 +262,7 @@ src/
     ENTERPRISE
   }
   ```
+
 - [ ] Design ProcessedImage model with comprehensive metadata
 - [ ] Design Template model for saved styles
 - [ ] Add NextAuth required models (Account, Session, VerificationToken)
@@ -257,6 +273,7 @@ src/
 - [ ] Create comprehensive seed script with sample data
 
 #### 2.4 Prisma Client & Database Layer
+
 - [ ] Create `src/lib/db.ts` with singleton Prisma client
 - [ ] Add connection error handling and retry logic
 - [ ] Create database helper functions (findUser, createImage, etc.)
@@ -266,6 +283,7 @@ src/
 - [ ] Test database operations thoroughly
 
 #### 2.5 NextAuth.js v5 Implementation
+
 - [ ] Create `src/lib/auth.ts` with NextAuth configuration
 - [ ] Set up Google OAuth provider with proper scopes
 - [ ] Configure Email provider with custom templates
@@ -276,6 +294,7 @@ src/
 - [ ] Test authentication flow end-to-end
 
 #### 2.6 Authentication UI Components
+
 - [ ] Create `src/components/auth/SignInButton.tsx`
 - [ ] Create `src/components/auth/SignOutButton.tsx`
 - [ ] Create `src/components/auth/UserDropdown.tsx`
@@ -286,6 +305,7 @@ src/
 - [ ] Add loading states for auth operations
 
 #### 2.7 Session Management & Middleware
+
 - [ ] Create `src/middleware.ts` for route protection
 - [ ] Add session validation helpers
 - [ ] Create useAuth custom hook
@@ -298,6 +318,7 @@ src/
 ### Phase 3: File Upload & Background Removal
 
 #### 3.1 Upload API Endpoint Development
+
 - [ ] Create `src/app/api/upload/route.ts` with POST handler
 - [ ] Configure formidable with specific options for PFP requirements
 - [ ] Add comprehensive file validation (type, size, dimensions)
@@ -309,6 +330,7 @@ src/
 - [ ] Add audit logging for uploads
 
 #### 3.2 Image Processing Pipeline
+
 - [ ] Create `src/lib/image-processor.ts` utility class
 - [ ] Add automatic format conversion (HEIC → PNG, etc.)
 - [ ] Implement image metadata extraction (EXIF data removal)
@@ -318,6 +340,7 @@ src/
 - [ ] Optimize for common PFP aspect ratios (1:1, 4:5)
 
 #### 3.3 Background Removal Service Integration
+
 - [ ] Create `src/lib/background-removal.ts` service class
 - [ ] Add Replicate API as fallback service
 - [ ] Implement retry logic with exponential backoff
@@ -328,6 +351,7 @@ src/
 - [ ] Add quality assessment for background removal results
 
 #### 3.4 Cloud Storage Integration (Vercel Blob)
+
 - [ ] Create `src/lib/storage.ts` with Vercel Blob client
 - [ ] Implement secure file upload with signed URLs
 - [ ] Add automatic file naming with UUID + timestamp
@@ -338,6 +362,7 @@ src/
 - [ ] Add file integrity checking (checksums)
 
 #### 3.5 Database Image Persistence
+
 - [ ] Create image repository pattern with Prisma
 - [ ] Save comprehensive image metadata
 - [ ] Link images to authenticated user
@@ -347,6 +372,7 @@ src/
 - [ ] Add image sharing and permissions
 
 #### 3.6 Error Handling & Monitoring
+
 - [ ] Create custom error classes for different failure types
 - [ ] Add Sentry integration for error tracking
 - [ ] Implement detailed logging with correlation IDs
@@ -359,6 +385,7 @@ src/
 ### Phase 4: Frontend UI Components & Editor
 
 #### 4.1 Upload Interface Components
+
 - [ ] Create `src/components/editor/UploadDropzone.tsx`
 - [ ] Implement drag-and-drop with react-dropzone
 - [ ] Add paste from clipboard functionality for quick PFP uploads
@@ -370,6 +397,7 @@ src/
 - [ ] Add image dimension validation (minimum 200x200 for PFPs)
 
 #### 4.2 Image Preview & Canvas System
+
 - [ ] Create `src/components/editor/ImageCanvas.tsx` with HTML5 Canvas
 - [ ] Implement dual-pane view (original vs processed)
 - [ ] Add zoom controls (25% to 500%) with mouse wheel support
@@ -381,6 +409,7 @@ src/
 - [ ] Optimize for common PFP aspect ratios and social media requirements
 
 #### 4.3 Editor Control Panel Architecture
+
 - [ ] Create `src/components/editor/EditorPanel.tsx` container
 - [ ] Design tabbed interface with shadcn/ui Tabs optimized for PFP editing
 - [ ] Create `src/stores/editor-store.ts` with Zustand
@@ -391,6 +420,7 @@ src/
 - [ ] Implement PFP-specific features (crop shapes, face detection)
 
 #### 4.4 Background Controls Implementation
+
 - [ ] Create `src/components/editor/BackgroundPanel.tsx`
 - [ ] Implement color picker with hex, RGB, HSL inputs
 - [ ] Add preset color palette optimized for professional PFPs
@@ -402,6 +432,7 @@ src/
 - [ ] Create professional background presets (solid colors, gradients)
 
 #### 4.5 Filter Controls Implementation
+
 - [ ] Create `src/components/editor/FilterPanel.tsx`
 - [ ] Implement slider controls optimized for portrait photography
 - [ ] Add preset filter combinations for PFPs (Professional, Warm, Cool, B&W, Vintage)
@@ -410,6 +441,7 @@ src/
 - [ ] Implement filter history and undo/redo
 
 #### 4.6 Transform & Effects Controls
+
 - [ ] Create `src/components/editor/TransformPanel.tsx`
 - [ ] Add scale control (50% to 200%) with aspect ratio lock
 - [ ] Implement rotation control (-45° to +45°) with snap angles
@@ -421,6 +453,7 @@ src/
 - [ ] Add face detection and auto-centering
 
 #### 4.7 PFP-Specific Advanced Features
+
 - [ ] Create crop shape controls (circle, square, rounded rectangle)
 - [ ] Implement automatic face detection and centering
 - [ ] Add social media size presets (LinkedIn, Twitter, Instagram, Facebook, Discord)
@@ -434,6 +467,7 @@ src/
 ### Phase 5: Canvas Engine & Real-time Processing
 
 #### 5.1 HTML5 Canvas Engine for PFPs
+
 - [ ] Create `src/lib/canvas-engine.ts` class optimized for portrait editing
 - [ ] Implement layer management system for complex compositions
 - [ ] Add history/undo functionality (20 steps max)
@@ -442,6 +476,7 @@ src/
 - [ ] Implement face detection integration
 
 #### 5.2 Real-time Preview System
+
 - [ ] Implement debounced updates (200ms delay for smooth editing)
 - [ ] Create background worker for heavy computations
 - [ ] Add progressive loading for large images
@@ -451,6 +486,7 @@ src/
 - [ ] Optimize for portrait orientation and common PFP sizes
 
 #### 5.3 Export System Implementation
+
 - [ ] Create `src/lib/export-engine.ts` optimized for social media
 - [ ] Implement high-resolution export (up to 2048x2048 for PFPs)
 - [ ] Add batch export functionality for multiple social platforms
@@ -463,6 +499,7 @@ src/
 ### Phase 6: Template System & PFP Presets
 
 #### 6.1 Template Data Model & API Enhancement
+
 - [ ] Complete Template API endpoints with PFP-specific features
 - [ ] Add template categories specific to professional use cases
 - [ ] Implement template preview generation
@@ -471,12 +508,14 @@ src/
 - [ ] Add template usage analytics
 
 #### 6.2 PFP Template Library Creation
+
 - [ ] Design 20+ professional PFP templates (Corporate, Creative, Academic, Tech, Healthcare)
 - [ ] Create template thumbnails and previews
 - [ ] Add template metadata (industry, style, color scheme)
 - [ ] Implement template versioning system
 
 #### 6.3 Template Management UI
+
 - [ ] Create `src/components/templates/TemplateGallery.tsx`
 - [ ] Implement template preview cards with hover effects
 - [ ] Add category filtering by industry/style
@@ -490,6 +529,7 @@ src/
 ### Phase 7: Dashboard & User Management
 
 #### 7.1 Image History & Management API
+
 - [ ] Create `src/app/api/images/route.ts` with full CRUD operations
 - [ ] Implement GET /api/images with advanced filtering
 - [ ] Add bulk operations endpoint (delete multiple)
@@ -498,6 +538,7 @@ src/
 - [ ] Add image metadata search capabilities
 
 #### 7.2 Dashboard UI Components
+
 - [ ] Create `src/app/(dashboard)/dashboard/page.tsx`
 - [ ] Implement responsive image grid with virtualization
 - [ ] Add image detail modal with metadata display
@@ -507,6 +548,7 @@ src/
 - [ ] Create export history tracking
 
 #### 7.3 User Profile & Settings
+
 - [ ] Create `src/app/(dashboard)/profile/page.tsx`
 - [ ] Implement user settings form with validation
 - [ ] Add usage statistics dashboard
@@ -519,6 +561,7 @@ src/
 ### Phase 8: Testing & Quality Assurance
 
 #### 8.1 Unit Testing Setup & Configuration
+
 - [ ] Configure Vitest with React Testing Library
 - [ ] Set up test database with Docker
 - [ ] Create test utilities and mocks
@@ -526,6 +569,7 @@ src/
 - [ ] Configure test coverage thresholds (80% minimum)
 
 #### 8.2 Component Testing Suite
+
 - [ ] Test UploadDropzone: file validation, drag-drop, error states
 - [ ] Test ImageCanvas: zoom, pan, render performance
 - [ ] Test EditorPanel: all control interactions
@@ -535,6 +579,7 @@ src/
 - [ ] Achieve 90%+ component test coverage
 
 #### 8.3 API Route Testing
+
 - [ ] Test /api/upload: validation, processing, error handling
 - [ ] Test /api/auth/[...nextauth]: authentication flows
 - [ ] Test /api/images: CRUD operations, permissions
@@ -543,6 +588,7 @@ src/
 - [ ] Add integration tests with real database
 
 #### 8.4 End-to-End Testing with Playwright
+
 - [ ] Set up Playwright with multiple browsers
 - [ ] Test complete user journeys
 - [ ] Test cross-browser compatibility (Chrome, Firefox, Safari)
@@ -554,6 +600,7 @@ src/
 ### Phase 9: Performance, SEO & Accessibility
 
 #### 9.1 Performance Optimization Implementation
+
 - [ ] Implement image lazy loading with next/image
 - [ ] Add service worker for caching strategies
 - [ ] Optimize bundle splitting
@@ -564,6 +611,7 @@ src/
 - [ ] Add memory leak prevention measures
 
 #### 9.2 SEO Implementation
+
 - [ ] Add comprehensive meta tags to all pages
 - [ ] Implement dynamic Open Graph images
 - [ ] Create XML sitemap with next-sitemap
@@ -573,6 +621,7 @@ src/
 - [ ] Create blog/documentation for SEO content
 
 #### 9.3 Accessibility (WCAG 2.1 AA Compliance)
+
 - [ ] Add proper ARIA labels to all interactive elements
 - [ ] Implement keyboard navigation for editor tools
 - [ ] Ensure color contrast ratios meet standards (4.5:1)
@@ -587,6 +636,7 @@ src/
 ### Phase 10: Production Deployment & DevOps
 
 #### 10.1 Environment Setup & Configuration
+
 - [ ] Set up Neon PostgreSQL production database
 - [ ] Configure Vercel Blob Storage with CDN
 - [ ] Set up Sentry for error monitoring
@@ -595,6 +645,7 @@ src/
 - [ ] Set up monitoring dashboards
 
 #### 10.2 Database Migration & Optimization
+
 - [ ] Run production migrations with zero downtime
 - [ ] Set up database backups and point-in-time recovery
 - [ ] Configure connection pooling with PgBouncer
@@ -603,6 +654,7 @@ src/
 - [ ] Set up read replicas for scaling
 
 #### 10.3 CI/CD Pipeline Implementation
+
 - [ ] Create comprehensive GitHub Actions workflow
 - [ ] Add automated dependency updates with Dependabot
 - [ ] Configure deployment previews for PRs
@@ -610,6 +662,7 @@ src/
 - [ ] Implement automated rollback procedures
 
 #### 10.4 Monitoring & Observability
+
 - [ ] Set up comprehensive logging with structured format
 - [ ] Add application performance monitoring (APM)
 - [ ] Configure uptime monitoring with alerts
@@ -622,6 +675,7 @@ src/
 ### Phase 11: Launch Preparation & Post-Launch
 
 #### 11.1 Pre-Launch Checklist
+
 - [ ] Complete security audit and penetration testing
 - [ ] Load testing with expected traffic patterns
 - [ ] Legal review of privacy policy and terms
@@ -632,6 +686,7 @@ src/
 - [ ] Documentation completion (API docs, user guides)
 
 #### 11.2 Launch Strategy & Marketing
+
 - [ ] Soft launch with limited user base
 - [ ] Product Hunt launch preparation
 - [ ] Social media campaign setup
@@ -642,6 +697,7 @@ src/
 - [ ] Press release and media outreach
 
 #### 11.3 Post-Launch Monitoring & Iteration
+
 - [ ] Monitor user adoption and retention metrics
 - [ ] Collect and analyze user feedback
 - [ ] Track feature usage and engagement
@@ -703,4 +759,4 @@ npm run dev
 
 ---
 
-*Check off tasks as you complete them. This comprehensive plan ensures nothing is missed in your PFPGen development!*
+_Check off tasks as you complete them. This comprehensive plan ensures nothing is missed in your PFPGen development!_
