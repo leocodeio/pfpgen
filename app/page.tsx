@@ -1,102 +1,344 @@
-import Image from "next/image";
+"use client";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Camera, Sparkles, Download, Users, Zap, Shield } from "lucide-react";
+import Link from "next/link";
+import { useSession, signIn } from "@/lib/auth-client";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { data: session, isPending } = useSession();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleGetStarted = () => {
+    if (session) {
+      window.location.href = "/editor";
+    } else {
+      signIn.social({
+        provider: "google",
+        callbackURL: "/editor",
+      });
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div className="flex items-center space-x-2">
+          <Camera className="h-8 w-8 text-blue-600" />
+          <span className="text-2xl font-bold text-gray-900">PFPGen</span>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+        <div className="flex items-center space-x-4">
+          {session ? (
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-600">
+                Welcome, {session.user.name}
+              </span>
+              <Link href="/editor">
+                <Button>Go to Editor</Button>
+              </Link>
+            </div>
+          ) : (
+            <Button
+              onClick={() => signIn.social({ provider: "google" })}
+              disabled={isPending}
+            >
+              Sign In with Google
+            </Button>
+          )}
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-20 text-center">
+        <div className="max-w-4xl mx-auto">
+          <Badge className="mb-6" variant="secondary">
+            ✨ AI-Powered Profile Picture Editor
+          </Badge>
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            Create Professional
+            <span className="text-blue-600"> Profile Pictures</span>
+            in Seconds
+          </h1>
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Remove backgrounds, apply professional filters, and optimize for
+            social media platforms. Perfect for LinkedIn, Instagram, Twitter,
+            and more.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              size="lg"
+              onClick={handleGetStarted}
+              disabled={isPending}
+              className="px-8 py-4 text-lg"
+            >
+              <Sparkles className="mr-2 h-5 w-5" />
+              Get Started Free
+            </Button>
+            <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
+              <Download className="mr-2 h-5 w-5" />
+              View Examples
+            </Button>
+          </div>
+          <p className="text-sm text-gray-500 mt-4">
+            5 free images included • No credit card required
+          </p>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Everything You Need for Professional Profile Pictures
+          </h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Powerful AI-driven tools that make professional photo editing
+            accessible to everyone.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <Card>
+            <CardHeader>
+              <Sparkles className="h-12 w-12 text-blue-600 mb-4" />
+              <CardTitle>AI Background Removal</CardTitle>
+              <CardDescription>
+                Advanced AI instantly removes backgrounds with precision,
+                perfect for professional headshots.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <Zap className="h-12 w-12 text-green-600 mb-4" />
+              <CardTitle>Professional Filters</CardTitle>
+              <CardDescription>
+                8 carefully crafted filters including vintage, dramatic, soft,
+                and professional presets.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <Users className="h-12 w-12 text-purple-600 mb-4" />
+              <CardTitle>Social Media Templates</CardTitle>
+              <CardDescription>
+                Pre-optimized templates for LinkedIn, Instagram, Twitter,
+                Facebook, and TikTok.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <Camera className="h-12 w-12 text-orange-600 mb-4" />
+              <CardTitle>Real-time Preview</CardTitle>
+              <CardDescription>
+                Interactive canvas with live editing. See your changes instantly
+                as you make them.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <Shield className="h-12 w-12 text-red-600 mb-4" />
+              <CardTitle>Shape Cropping</CardTitle>
+              <CardDescription>
+                Crop to perfect circles, squares, hearts, stars, and other
+                custom shapes.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <Download className="h-12 w-12 text-teal-600 mb-4" />
+              <CardTitle>Multiple Export Formats</CardTitle>
+              <CardDescription>
+                Download in PNG, JPG, or WebP formats with quality optimization
+                for any platform.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="bg-gray-50 py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Simple 4-Step Process
+            </h2>
+            <p className="text-xl text-gray-600">
+              From upload to download in under a minute
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-600">1</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Upload Image</h3>
+              <p className="text-gray-600">
+                Drag and drop or click to upload your photo
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-green-600">2</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Remove Background</h3>
+              <p className="text-gray-600">
+                AI automatically removes the background
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-purple-600">3</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Apply Edits</h3>
+              <p className="text-gray-600">
+                Add backgrounds, filters, and adjustments
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-orange-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-orange-600">4</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Download</h3>
+              <p className="text-gray-600">
+                Export optimized for your favorite platform
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Simple, Fair Pricing
+          </h2>
+          <p className="text-xl text-gray-600">
+            Start free, upgrade when you need more
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <Card className="border-2">
+            <CardHeader>
+              <CardTitle className="text-2xl">Free</CardTitle>
+              <CardDescription>Perfect for trying out PFPGen</CardDescription>
+              <div className="text-3xl font-bold text-gray-900">$0</div>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>5 image
+                  processing credits
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  All editing features
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  Basic export formats
+                </li>
+              </ul>
+              <Button
+                className="w-full mt-6"
+                variant="outline"
+                onClick={handleGetStarted}
+                disabled={isPending}
+              >
+                Get Started Free
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-blue-500 relative">
+            <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+              Most Popular
+            </Badge>
+            <CardHeader>
+              <CardTitle className="text-2xl">Pro</CardTitle>
+              <CardDescription>
+                For professionals and frequent users
+              </CardDescription>
+              <div className="text-3xl font-bold text-gray-900">
+                $9.99<span className="text-lg text-gray-600">/month</span>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  Unlimited image processing
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  All editing features
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  All export formats
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  Priority processing
+                </li>
+              </ul>
+              <Button className="w-full mt-6">Upgrade to Pro</Button>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+              <Camera className="h-6 w-6" />
+              <span className="text-xl font-bold">PFPGen</span>
+            </div>
+            <div className="flex space-x-6">
+              <Link href="/privacy" className="text-gray-400 hover:text-white">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="text-gray-400 hover:text-white">
+                Terms of Service
+              </Link>
+              <Link href="/support" className="text-gray-400 hover:text-white">
+                Support
+              </Link>
+            </div>
+          </div>
+          <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
+            <p>
+              &copy; 2024 PFPGen. All rights reserved. Built with ❤️ for
+              professional profile picture creation.
+            </p>
+          </div>
+        </div>
       </footer>
     </div>
   );
